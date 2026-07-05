@@ -437,6 +437,7 @@ error:
 	rw_exit_read(&l->l_identity_lock);
 	explicit_bzero(&hs, sizeof(hs));
 	explicit_bzero(key, NOISE_SYMMETRIC_KEY_LEN);
+	explicit_bzero(preshared_key, sizeof(preshared_key));
 	return ret;
 }
 
