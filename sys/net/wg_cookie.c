@@ -139,6 +139,7 @@ cookie_maker_consume_payload(struct cookie_maker *cp,
 	cp->cp_mac1_valid = 0;
 
 error:
+	explicit_bzero(cookie, sizeof(cookie));
 	rw_exit_write(&cp->cp_lock);
 	return ret;
 }
