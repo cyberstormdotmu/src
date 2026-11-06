@@ -626,6 +626,7 @@ check_passwd(int unit, char *auser, int userlen,
     u_int32_t remote;
     ipcp_options *ipwo = &ipcp_wantoptions[unit];
     char passwd[256], user[256];
+	char *p;
     char secret[MAXWORDLEN];
     static int attempts = 0;
 
@@ -652,10 +653,11 @@ check_passwd(int unit, char *auser, int userlen,
     } else {
 	check_access(f, filename);
 	remote = ipwo->accept_remote? 0: ipwo->hisaddr;
+	p = crypt(passwd, secret);
 	if (scan_authfile(f, user, our_name, remote,
 			  secret, &addrs, filename) < 0
 	    || (secret[0] != 0 && (cryptpap || strcmp(passwd, secret) != 0)
-		&& strcmp(crypt(passwd, secret), secret) != 0)) {
+		&& strcmp(p, secret) != 0) || p == NULL) {
 	    syslog(LOG_WARNING, "PAP authentication failure for %s", user);
 	    ret = UPAP_AUTHNAK;
 	}
